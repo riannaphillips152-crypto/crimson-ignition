@@ -46,9 +46,7 @@ function toggleInfo() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  
-  // --- FIX: Performance Optimization ---
-  pixelDensity(1);
+    pixelDensity(1);
 
   // --- VIDEO CAPTURE SETUP ---
   capture = createCapture(VIDEO);
@@ -79,12 +77,6 @@ function draw() {
       push();
       // Draw video
       image(capture, x, y, vidWidth, vidHeight);
-      
-      // Border styling matching the Anger theme (Crimson/Red)
-      // noFill();
-      // stroke(220, 20, 60, 150); // Crimson, semi-transparent
-      // strokeWeight(2); // Slightly thicker for aggression
-      // rect(x, y, vidWidth, vidHeight);
       pop();
   }
 }
@@ -96,6 +88,7 @@ function windowResized() {
 }
 
 function mousePressed(event) {
+  
   // Prevent interaction if clicking inside the interaction box
   if (event && event.target.closest('#interaction-instructions')) return;
 
@@ -144,23 +137,23 @@ class Anger {
     // --- INTERACTIVITY: Mouse X for Spread (Chaos vs. Focus) ---
     this.spread = map(mouseX, 0, width, 0.5, 2.5, true); // Focused left, chaotic right
 
-    // --- Update Central Pressure Point ---
+    // ---  Central Pressure Point ---
     let pulseFactor = sin(frameCount * 0.1 * this.intensity); // Faster pulse with higher intensity
     this.pressureSize = lerp(this.pressureSize, this.pressureTargetSize + pulseFactor * 30, 0.15 * this.intensity);
     this.pressureAlpha = lerp(this.pressureAlpha, this.pressureTargetAlpha + pulseFactor * 50, 0.15 * this.intensity);
     this.pressureAlpha = constrain(this.pressureAlpha, 100, 255);
 
-    // Draw central pressure point (a pulsating, hot core)
+    //  central pressure point (a pulsating, hot core)
     fill(red(this.pressureColor), green(this.pressureColor), blue(this.pressureColor), this.pressureAlpha);
     noStroke();
     ellipse(width / 2, height / 2, this.pressureSize, this.pressureSize);
     
-    // Draw an inner, brighter core
+    // an inner, brighter core
     fill(red(this.pressureColor), green(this.pressureColor), blue(this.pressureColor), 255);
     ellipse(width / 2, height / 2, this.pressureSize * 0.5, this.pressureSize * 0.5);
 
 
-    // Spawn new shards from the center based on intensity
+    //  new shards from the center based on intensity
     if (random(1) < 0.05 * this.intensity) { // More frequent spawning with higher intensity
       let newShard = new AngerShard(width / 2, height / 2, this.currentPalette.shards);
       newShard.applyBurstEffect(this.intensity, this.spread); // Give initial burst velocity
